@@ -69,7 +69,7 @@ public class Queue<ELEMENT> {
         return this.data[this.head];
     }
  
-    public ELEMENT pool() {
+    public ELEMENT poll() {
         if (this.size() <= 0) {
             return null;
         }

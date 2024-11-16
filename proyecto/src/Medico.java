@@ -1,5 +1,5 @@
 
-public class Medico {
+public class Medico implements Comparable<Medico>{
 	private int matriculaProfesional; 
 	private String nombre; 
 	private String especialidad; 
@@ -51,5 +51,9 @@ public class Medico {
 	public String toString() {
 		return "Medico [matriculaProfesional=" + matriculaProfesional + ", nombre=" + nombre + ", especialidad="
 				+ especialidad + "]";
+	}
+	
+	public int compareTo(Medico medico) {
+		return Integer.compare(this.matriculaProfesional, medico.matriculaProfesional);
 	}
 }
