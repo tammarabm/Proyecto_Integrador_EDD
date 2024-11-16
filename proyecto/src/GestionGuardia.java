@@ -1,4 +1,5 @@
 
+
 public class GestionGuardia {
 	Medicamento[] medicamentos;
 	Queue<Paciente> prioridadMedia;
@@ -62,7 +63,24 @@ public class GestionGuardia {
 	}
 	
 	
-	
+	/*public void atenderPrioridadMedia() {
+		if (prioridadMedia.isEmpty()) {
+            System.out.println("No hay pacientes en la cola de prioridad media.");
+            return;
+        }
+        while (!prioridadMedia.isEmpty()) {
+            Paciente paciente = prioridadMedia.poll(); 
+            Medico medico = medicosDisponibles.buscarMedico("Clínico");  
+            if (medico != null) {
+                Medicamento medicamento = medicamentos[0];  
+                ConsultaMedica consulta = new ConsultaMedica(medico, paciente, medicamento, 1, LocalDate.now());
+                consultasRealizadas.addLast(consulta);
+                System.out.println("Consulta realizada para el paciente: " + paciente.getNombre());
+            } else {
+                System.out.println("No hay médicos clínicos disponibles.");
+            }
+        }
+    }*/
 	
 	
 }
