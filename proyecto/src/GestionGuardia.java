@@ -1,4 +1,4 @@
-
+import java.time.LocalDate;
 
 public class GestionGuardia {
 	Medicamento[] medicamentos;
@@ -13,14 +13,13 @@ public class GestionGuardia {
 	private int cantidadMedicamentos;
 
 	public GestionGuardia() {
-	    this.medicamentos = new Medicamento[10];
 	    this.medicosDisponibles = new BinarySearchTree<>();
 	    this.prioridadAlta = new Queue<>();
 	    this.prioridadMedia = new Queue<>();
 	    this.cirugiasProgramadas = new StackGenerica<>();
-	    this.cantidadMedicamentos=0;
-	   
-		}
+	    this.consultasRealizadas= new SimpleLinkedList<>();
+	    this.cirugiasRealizadas = new SimpleLinkedList<>();   
+	}
 	public GestionGuardia(int cantidadMedicamento) {
 		this.medicamentos = new Medicamento[cantidadMedicamento];
 	    this.medicosDisponibles = new BinarySearchTree<>();
@@ -29,23 +28,23 @@ public class GestionGuardia {
 	    this.cirugiasProgramadas = new StackGenerica<>();
 	    this.consultasRealizadas= new SimpleLinkedList<>();
 	    this.cirugiasRealizadas = new SimpleLinkedList<>();
-	    this.cantidadMedicamentos=0;
+	    this.cantidadMedicamentos=cantidadMedicamento;
 	}
 
 	
 	public void registrarMedicamento(Medicamento medicamento) {
-		for (int i =0; i<cantidadMedicamentos;i++) {
-			if(medicamentos[i].getCodigo()==(medicamento.getCodigo())) {
-				System.out.println("Este medicamento ya existe");
-				
-			}
-		}
+		
 		if (cantidadMedicamentos<medicamentos.length) {
 			medicamentos[cantidadMedicamentos]=medicamento;
 			cantidadMedicamentos++;
 			System.out.println("Medicamento registrado");
 		}else {
 			System.out.println("No se pueden registrar más medicamentos");
+		}
+		for (int i =0; i<medicamentos.length;i++) {
+			if(medicamentos[i].getCodigo()==medicamento.getCodigo()) {
+				System.out.println("Este medicamento ya existe");	
+			}
 		}
 	}
 
@@ -56,14 +55,31 @@ public class GestionGuardia {
 
 	public void recibirPaciente(Paciente paciente) {
 		if(paciente.getDiagnosticoPreliminar()==1) {
-			prioridadAlta.add(paciente);
-		}else if(paciente.getDiagnosticoPreliminar()==2) {
-			prioridadMedia.add(paciente);
+			System.out.println("Prioridad Alta");
+			this.prioridadAlta.add(paciente);	
+		} else if (paciente.getDiagnosticoPreliminar()==2) {
+			System.out.println("Prioridad Media");
+			this.prioridadMedia.add(paciente);
+		}
+	}
+	
+	public void atenderPrioridadAlta() {
+		int maximoPacientes=3;
+		if(prioridadAlta.isEmpty()) {
+			System.out.println("No hay pacientes en la cola de prioridad alta...");
+			return; 
+		}
+		while (!prioridadAlta.isEmpty() && maximoPacientes>0) {
+			Paciente paciente= prioridadAlta.poll();
+			Medico cirujano= medicosDisponibles.buscar();
+			Cirugia cirugia =new Cirugia(cirujano, paciente, LocalDate.now());
+			cirugiasProgramadas.push(cirugia);
+			System.out.println("Cirugia programada para el paciente: " + paciente.getNombre());
 		}
 	}
 	
 	
-	/*public void atenderPrioridadMedia() {
+	/**public void atenderPrioridadMedia() {
 		if (prioridadMedia.isEmpty()) {
             System.out.println("No hay pacientes en la cola de prioridad media.");
             return;

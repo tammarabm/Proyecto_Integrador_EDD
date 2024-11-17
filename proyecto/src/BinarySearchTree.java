@@ -1,3 +1,5 @@
+import java.util.function.Predicate;
+
 public class BinarySearchTree<ELEMENT extends Comparable<ELEMENT>> extends BinaryTree<ELEMENT> {
  
  
@@ -129,6 +131,24 @@ public class BinarySearchTree<ELEMENT extends Comparable<ELEMENT>> extends Binar
         }
         find.left = find.right = null;
         return save;
+    }
+    
+    public Medico buscar() {
+    	return buscarRecursivo(this.root); 
+    }
+    private Medico buscarRecursivo(BTNode<ELEMENT> nodo) {
+    	if (nodo==null) {
+    		return null;
+    	}
+    	if(nodo.item instanceof Medico && ((Medico)nodo.item).getEspecialidad().equalsIgnoreCase("Cirujano")) {
+    		return (Medico)nodo.item; 
+    	}
+    	
+    	Medico left = buscarRecursivo(nodo.left);
+    	if(left!=null) {
+    		return left; 
+    	}
+    	return buscarRecursivo(nodo.right);
     }
  
 }
