@@ -1,3 +1,4 @@
+package GestionHospital;
 
 public class Medicamento {
 	private int codigo; 
@@ -65,7 +66,6 @@ public class Medicamento {
 
 	@Override
 	public String toString() {
-		return "Medicamento [codigo=" + codigo + ", descripcion=" + descripcion + ", precioUnitario=" + precioUnitario
-				+ ", stockDisponible=" + stockDisponible + "]";
+		return "Codigo: " + codigo + ", Descripcion: " + descripcion + ", Precio Unitario: " + precioUnitario + ", Stock: " + stockDisponible;
 	}	
 }

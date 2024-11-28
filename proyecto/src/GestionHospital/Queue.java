@@ -1,14 +1,24 @@
-//import java.util.Arrays;
- 
+package GestionHospital;
+
 public class Queue<ELEMENT> {
  
-    private final static Integer defaulDimension = 10; 
-    
+    //region Constants
+ 
+    private final static Integer defaulDimension = 10;
+ 
+    //endregion
+ 
+    //region Attributes
+ 
     private ELEMENT [] data;
     private int head;
     private int tail;
     private int count;
-
+ 
+    //endregion
+ 
+    //region Constructors
+ 
     public Queue() {
         this(Queue.defaulDimension);
     }
@@ -18,14 +28,26 @@ public class Queue<ELEMENT> {
         this.tail = 0;
         this.count = 0;
     }
-    
+    //endregion
+ 
+    //region Queue Internal Methods
     private int next(int pos) {
         if (++pos >= this.data.length) {
             pos = 0;
         }
         return pos;
     }
-   
+    //endregion
+ 
+ 
+    //region Queue Methods
+ 
+    // Operacion EnQueue en la teoría de Estructura de Datos
+    //
+    // Inserts the specified element into this queue if it is possible to do so
+    // immediately without violating capacity restrictions, returning true upon
+    // success and throwing an IllegalStateException if no space is currently
+    // available.
     public boolean add(ELEMENT element) {
  
         if (this.size() >= this.data.length) {
@@ -39,6 +61,10 @@ public class Queue<ELEMENT> {
         return true;
     }
  
+    // Operacion peek en la teoría de Estructura de Datos
+    //
+    // Retrieves, but does not remove, the head of this queue. This method differs
+    // from peek only in that it throws an exception if this queue is empty.
     public ELEMENT element() {
  
         if (this.size() <= 0) {
@@ -47,7 +73,13 @@ public class Queue<ELEMENT> {
  
         return this.data[this.head];
     }
-
+ 
+    // Operacion EnQueue en la teoría de Estructura de Datos
+    //
+    // Inserts the specified element into this queue if it is possible to do so
+    // immediately without violating capacity restrictions. When using a
+    // capacity-restricted queue, this method is generally preferable to add(E),
+    // which can fail to insert an element only by throwing an exception.
     public boolean offer(ELEMENT element) {
  
         if (this.size() >= this.data.length) {
@@ -60,7 +92,9 @@ public class Queue<ELEMENT> {
  
         return true;
     }
-
+ 
+    // Retrieves, but does not remove, the head of this queue, or returns null if
+    // this queue is empty.
     public ELEMENT peek() {
         if (this.size() <= 0) {
             return null;
@@ -69,7 +103,11 @@ public class Queue<ELEMENT> {
         return this.data[this.head];
     }
  
-    public ELEMENT poll() {
+    // Operacion DeQueue en la teoría de Estructura de Datos
+    //
+    // Retrieves and removes the head of this queue, or returns null if this queue
+    // is empty.
+    public ELEMENT pool() {
         if (this.size() <= 0) {
             return null;
         }
@@ -81,6 +119,10 @@ public class Queue<ELEMENT> {
         return result;
     }
  
+    // Operacion DeQueue en la teoría de Estructura de Datos
+    //
+    // Retrieves and removes the head of this queue. This method differs from poll()
+    // only in that it throws an exception if this queue is empty.
     public ELEMENT remove() {
         if (this.size() <= 0) {
             throw new IllegalStateException("Cola vacía ...");
@@ -92,6 +134,10 @@ public class Queue<ELEMENT> {
  
         return result;
     }
+    //endregion
+ 
+ 
+    //region Override Object basic methods
  
     @Override
     public String toString() {
@@ -111,6 +157,10 @@ public class Queue<ELEMENT> {
         sb.append("]");
         return sb.toString();
     }
+    //endregion
+ 
+ 
+    //region Collection Methods
  
     public boolean isEmpty() {
         return this.count <= 0;
@@ -127,6 +177,10 @@ public class Queue<ELEMENT> {
         }
         return result;
     }
+    //endregion
+ 
+ 
+    //region Caso Ejemplo b) Methods
  
     public static Queue<Object> union(Queue<?> stack1, Queue<?> stack2) {
  
@@ -145,4 +199,6 @@ public class Queue<ELEMENT> {
     public Queue<Object> union(Queue<?> stack2) {
         return Queue.union(this, stack2);
     }
+    //endregion
+ 
 }

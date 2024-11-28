@@ -1,38 +1,15 @@
+/*La información que se registra para un paciente es: dni, nombre, edad, antecedentes (por ejemplo: hipertenso, diabético, etc.), diagnostico preliminar (1 o 2). */
+
+package GestionHospital;
 
 public class Paciente {
 	private int dni;
-	private String nombre; 
-	private int edad; 
-	private String antecedentes; 
+	private String nombre;
+	private int edad;
+	private String antecedentes;
 	private int diagnosticoPreliminar;
 	
-	public Paciente() {
-		
-	}
-	
-	public Paciente(int dni) {
-		this.dni = dni;
-	}
-
-	public Paciente(int dni, String nombre) {
-		this.dni = dni;
-		this.nombre = nombre;
-	}
-	
-	public Paciente(int dni, String nombre, int edad) {
-		this.dni = dni;
-		this.nombre = nombre;
-		this.edad = edad;
-	}
-	
-	public Paciente(int dni, String nombre, int edad, String antecedentes) {
-		this.dni = dni;
-		this.nombre = nombre;
-		this.edad = edad;
-		this.antecedentes = antecedentes;
-	}
-
-	public Paciente(int dni, String nombre, int edad, String antecedentes, int diagnosticoPreliminar) {
+	public Paciente (int dni, String nombre, int edad, String antecedentes, int diagnosticoPreliminar) {
 		this.dni = dni;
 		this.nombre = nombre;
 		this.edad = edad;
@@ -82,7 +59,6 @@ public class Paciente {
 
 	@Override
 	public String toString() {
-		return "Paciente [dni=" + dni + ", nombre=" + nombre + ", edad=" + edad + ", antecedentes=" + antecedentes
-				+ ", diagnosticoPreliminar=" + diagnosticoPreliminar + "]";
+		return "Paciente: " + nombre +  ", DNI: " + dni + ", Edad: " + edad + ", Antecedentes: " + antecedentes + ", Diagnostico Preliminar: " + diagnosticoPreliminar;
 	}
 }

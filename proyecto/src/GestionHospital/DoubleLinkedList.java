@@ -1,3 +1,4 @@
+package GestionHospital;
 
 import java.util.Iterator;
  
@@ -6,6 +7,7 @@ public class DoubleLinkedList<ELEMENT> implements ILinkedList<ELEMENT> {
     //region Node Class
  
     protected class Node<ELEMENT> {
+    	protected Medico medico;
         protected ELEMENT item;
         protected Node<ELEMENT> next;
         protected Node<ELEMENT> prev;
@@ -138,6 +140,38 @@ public class DoubleLinkedList<ELEMENT> implements ILinkedList<ELEMENT> {
         }
         --this.count;
         return item;
+    }
+    
+    
+    public boolean remove(Medico medico) {
+        if (this.head == null) {
+            return false; // La lista está vacía
+        }
+
+        // Si el elemento a eliminar es el primer nodo
+        if (this.head.item.equals(medico)) {
+            this.head = this.head.next;
+            if (this.head == null) { // Si la lista ahora está vacía
+                this.tail = null;
+            }
+            --this.count;
+            return true;
+        }
+
+        // Buscar el nodo a eliminar
+        Node<ELEMENT> current = this.head;
+        while (current.next != null) {
+            if (current.next.item.equals(medico)) {
+                current.next = current.next.next;
+                if (current.next == null) { // Si eliminamos el último nodo
+                    this.tail = current;
+                }
+                --this.count;
+                return true;
+            }
+            current = current.next;
+        }
+        return false; // El elemento no se encontró en la lista
     }
     //endregion
  

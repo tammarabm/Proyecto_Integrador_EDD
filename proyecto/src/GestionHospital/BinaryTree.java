@@ -1,3 +1,5 @@
+package GestionHospital;
+
 public class BinaryTree<ELEMENT> {
  
  

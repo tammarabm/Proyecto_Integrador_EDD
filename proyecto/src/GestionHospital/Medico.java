@@ -1,3 +1,4 @@
+package GestionHospital;
 
 public class Medico implements Comparable<Medico>{
 	private int matriculaProfesional; 
@@ -49,8 +50,7 @@ public class Medico implements Comparable<Medico>{
 
 	@Override
 	public String toString() {
-		return "Medico [matriculaProfesional=" + matriculaProfesional + ", nombre=" + nombre + ", especialidad="
-				+ especialidad + "]";
+		return "Matricula profesional: " + matriculaProfesional + ", Nombre: " + nombre + ", Especialidad: " + especialidad;
 	}
 	
 	public int compareTo(Medico medico) {

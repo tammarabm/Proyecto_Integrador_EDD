@@ -1,3 +1,4 @@
+package GestionHospital;
 
 import java.util.Iterator;
  
@@ -149,8 +150,33 @@ public class SimpleLinkedList<ELEMENT> implements ILinkedList<ELEMENT> {
  
         return sb.toString();
     }
-    //endregion
- 
+    
+    public void remove(ELEMENT item) {
+        if (this.count == 0) {
+            throw new RuntimeException("La lista está vacía...");
+        }
+    	else {
+    		if(head == tail && item == tail.item) {
+    			head = tail = null;
+    		}else if (item == tail.item) {
+    			tail = tail.next;
+    		}else {
+    			Node<ELEMENT> prev, temp;
+    			prev = tail;
+    			temp = head.next;
+    			while (temp != null && temp.item != item) {
+    				prev = prev.next;
+    				temp = temp.next;
+    			}
+    			if (temp != null) {
+    				prev.next = temp.next;
+    				if(temp == tail){
+    					tail = prev;
+    				}
+    			}
+    		}
+    	}
+    }
  
     //region Iterable Methods
     @Override

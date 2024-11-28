@@ -1,14 +1,15 @@
+package GestionHospital;
 
-public class StackGenerica<ELEMENT> {
+public class Stack<ELEMENT> {
 	private final static Integer defaultDimension=10; 
 	private ELEMENT [] datos;
 	private Integer cuenta; 
 	
-	public StackGenerica() {
-		this(StackGenerica.defaultDimension);
+	public Stack() {
+		this(Stack.defaultDimension);
 	}
 	
-	public StackGenerica(Integer dimension) {
+	public Stack(Integer dimension) {
 		if (dimension <= 0) {
             throw new IllegalArgumentException("El tamaño máximo debe ser mayor que 0");
         }

@@ -1,3 +1,4 @@
+package GestionHospital;
 
 
 public interface ILinkedList<ELEMENT> extends Iterable<ELEMENT> {
