@@ -87,22 +87,22 @@ public class BinarySearchTree<ELEMENT extends Comparable<ELEMENT>> extends Binar
         return save;
     }
 
-    public Medico buscar() {
-        return buscarRecursivo(this.root); 
+    public Medico buscarPorEspecialidad(String especialidad) {
+        return buscarRecursivoEspecialidad(this.root, especialidad); 
     }
-    private Medico buscarRecursivo(BTNode<ELEMENT> nodo) {
+    private Medico buscarRecursivoEspecialidad(BTNode<ELEMENT> nodo, String especialidad) {
         if (nodo==null) {
             return null;
         }
-        if(nodo.item instanceof Medico && ((Medico)nodo.item).getEspecialidad().equalsIgnoreCase("Cirujano")) {
+        if(nodo.item instanceof Medico && ((Medico)nodo.item).getEspecialidad().equalsIgnoreCase(especialidad)) {
             return (Medico)nodo.item; 
         }
 
-        Medico left = buscarRecursivo(nodo.left);
+        Medico left = buscarRecursivoEspecialidad(nodo.left, especialidad);
         if(left!=null) {
             return left; 
         }
-        return buscarRecursivo(nodo.right);
+        return buscarRecursivoEspecialidad(nodo.right, especialidad);
     }
  
     private ELEMENT removeByFusion(ELEMENT item) {

@@ -153,7 +153,7 @@ public class Helper {
             try {
                 System.out.println(mensaje);
                 numero = Integer.parseInt(entrada.nextLine().trim());
-                if (numero >= 0 && numero < 99) {
+                if (numero >= 0 && numero <= 100) {
                     return numero;
                 } else {
                     System.out.println("Error!!! No es una edad valida.");

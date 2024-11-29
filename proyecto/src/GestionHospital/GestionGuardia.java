@@ -16,22 +16,18 @@
 
 package GestionHospital;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
 public class GestionGuardia {
 	public static BinarySearchTree<Medico> disponibles = new BinarySearchTree<>();
-	public static DoubleLinkedList<Medico> listaMedicos = new DoubleLinkedList<Medico>();	
 	public static DoubleLinkedList<ConsultaMedica> consultasRealizadas = new DoubleLinkedList<>();	
 	public static DoubleLinkedList<Cirugia> cirugiasRealizadas = new DoubleLinkedList<>();
 	public static Stack<Cirugia> cirugiasProgramadas = new Stack<Cirugia>();
 	public static Medicamento[] arregloMedicamentos;
     public static Queue<Paciente> prioridadMedia = new Queue<Paciente>();
 	public static Queue<Paciente> prioridadAlta = new Queue<Paciente>();
-	private static List<Medico> medicosRegistrados = new ArrayList<>();
 	private static Medico medicoClinicaGeneralRepetido = null;
 	public static Scanner scanner = new Scanner(System.in);
 	private static int contadorPacientesPrioridadMedia = 0;
@@ -66,7 +62,6 @@ public class GestionGuardia {
 		String especialidad = Helper.validarEspecialidad(scanner, "Especialidad: ");
 		Medico medico = new Medico(matriculaProfesional,nombre,especialidad);
 		disponibles.add(medico);
-		listaMedicos.addFirst(medico);
 	}
 	
 	public static int generarMatriculaAleatoria() {
@@ -130,7 +125,6 @@ public class GestionGuardia {
             		medicoClinicaGeneralRepetido = medicoPrioridadMedia;
             		System.out.println("El médico " + medicoPrioridadMedia.getNombre() + " ha sido reintegrado al árbol.");
             		disponibles.add(medicoPrioridadMedia);
-            		listaMedicos.addFirst(medicoPrioridadMedia);
             	}
                 
         	}else {
@@ -148,7 +142,7 @@ public class GestionGuardia {
 	@SuppressWarnings("deprecation")
 	public static ConsultaMedica registrarConsulta(Medicamento[] medicamentos, Paciente paciente, Medico medico) {
 		System.out.println("\n----- Registro de la Consulta del Paciente ------");
-		System.out.println("\nPaciente: "+paciente);
+		System.out.println("\n"+paciente);
 		System.out.println("\nMedico asignado: " + medico.toString());
 		Medicamento medicacionAdministrada = obtenerMedicamentoAleatorio(medicamentos);
 		System.out.println("Medicacion Administrada: " + medicacionAdministrada.toString());
@@ -189,26 +183,32 @@ public class GestionGuardia {
 
 	
 	public static void atenderPrioridadAlta() {
-        int maximoPacientes=3;
-        if(prioridadAlta.isEmpty()) {
-            System.out.println("No hay pacientes en la cola de prioridad alta...");
+        if(prioridadAlta.isEmpty() && cirugiasProgramadas.isEmpty()) {
+            System.out.println("No hay pacientes en la cola de prioridad alta...ni cirugías programadas...");
             return; 
         }
-        while (!prioridadAlta.isEmpty() && maximoPacientes > 0) {
-            Medico cirujano= extraerMedico("Cirujano");
-            if (cirujano == null) {
-            	System.out.println("No hay Medicos Cirujanos");
-            	return;
-            }
-            else {
-            	Paciente paciente= prioridadAlta.pool();
-	            Cirugia cirugia = registrarCirugia(cirujano, paciente);
+        while (!prioridadAlta.isEmpty() || !cirugiasProgramadas.isEmpty()) {
+        	realizarCirugia();
+        	
+        	if (!prioridadAlta.isEmpty() && cirugiasProgramadas.size() < 3) {
+                for (int i = cirugiasProgramadas.size(); i < 3 && !prioridadAlta.isEmpty(); i++) {
+                	System.out.println("\n---Programar Cirugias---");
+	                Paciente paciente = prioridadAlta.pool();
+	                System.out.println("\nPaciente :" + paciente.getNombre());
+	                Medico medicoPrioridadAlta = extraerMedico("Cirujano");
+		        	if (medicoPrioridadAlta == null) {
+		        		System.out.println("\nNo hay Medicos Cirujanos. ");
+		        		System.out.println("\nSerás reintegrado a la cola. ");
+		        		prioridadAlta.add(paciente);
+		        		break;
+		        	}
+	            Cirugia cirugia = registrarCirugia(medicoPrioridadAlta, paciente);
 	            cirugiasProgramadas.push(cirugia);
 	            System.out.println("Cirugia programada para el paciente: " + paciente.getNombre());
-	            maximoPacientes--;
-            }
+        	}
+         }
         }
-        realizarCirugia();
+        
     }
 	
 	private static Medico extraerMedico(String especialidad) {
@@ -216,16 +216,14 @@ public class GestionGuardia {
             return null;
         }
         else {
-			for (Medico medico : listaMedicos) {
-				if (medico.getEspecialidad() == especialidad) {
-					if (medico != medicoClinicaGeneralRepetido) {
-						System.out.println("Se asigno el medico: " + medico);
-						disponibles.remove(medico);
-						listaMedicos.remove(medico);
-						return medico;
-					}
-				}
-			}
+        	Medico medico= disponibles.buscarPorEspecialidad(especialidad);
+        	if (medico != null || medico!=medicoClinicaGeneralRepetido) {
+        		System.out.println("Se asigno el medico: " + medico);
+        	    disponibles.remove(medico);
+        	    System.out.println("Médico eliminado del árbol: " + medico.getNombre());
+        	    return medico;
+        	}
+			
 		    return null;
         }
     }
@@ -234,31 +232,32 @@ public class GestionGuardia {
 		int quirofanosDisponibles=3; 
 		int contador=0;
 		while(!cirugiasProgramadas.isEmpty() && contador<quirofanosDisponibles) {
+			System.out.println("\n---Cirugias---");
 			Cirugia cirugia = cirugiasProgramadas.pop();
 			Paciente paciente = cirugia.getPaciente();
 		    Medico cirujano = cirugia.getMedico();
-		    System.out.println("Paciente: " + paciente.getNombre());
+		    System.out.println("\nPaciente: " + paciente.getNombre());
 		    System.out.println("Cirujano: " + cirujano.getNombre());
-			contador++;
 			cirugiasRealizadas.addFirst(cirugia);
 			reintegrarMedico(cirujano);
+			contador++;
 		}
 		if (contador == quirofanosDisponibles) {
-			System.out.println("Se ha alcanzado el máximo de cirugías simultáneas.");
+			System.out.println("\nSe ha alcanzado el máximo de cirugías simultáneas.");
 		} else {
-		    System.out.println("No hay más cirugías programadas.");
+		    System.out.println("\nNo hay cirugías programadas.");
 		}
 	}
 	
 	public static void reintegrarMedico(Medico cirujano) {
-	    if (!medicosRegistrados.contains(cirujano)) {
-	    	medicosRegistrados.add(cirujano);
-	        disponibles.add(cirujano);
-	        listaMedicos.addFirst(cirujano);
-	        System.out.println("El médico " + cirujano.getNombre() + " ha sido reintegrado al árbol.");
-	    } else {
-	        System.out.println("El médico " + cirujano.getNombre() + " ya está en el árbol de disponibles.");
-	    }
+		 if (cirujano == null) {
+		        System.out.println("No se puede reintegrar un cirujano nulo.");
+		        return;
+		    }
+		 
+		 disponibles.add(cirujano);
+	     System.out.println("El médico " + cirujano.getNombre() + " ha sido reintegrado al árbol.");
+	    
 	}
 	
 	public static Cirugia registrarCirugia(Medico cirujano, Paciente paciente) {
@@ -277,10 +276,7 @@ public class GestionGuardia {
     		System.out.println("\nNo hay Medicos Disponibles.");
     	}
     	else {
-			for (Medico medico : listaMedicos) {
-				System.out.println(medico.toString());
-			}
-			//disponibles.InOrder();
+			disponibles.InOrder();
     	}
     }
     

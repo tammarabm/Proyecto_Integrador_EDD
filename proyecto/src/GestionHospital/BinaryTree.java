@@ -30,7 +30,7 @@ public class BinaryTree<ELEMENT> {
  
         // Método para propósitos académicos
         public void Visit() {
-            System.out.printf("%s ", this.item.toString());
+            System.out.printf("\n%s ", this.item.toString());
         }
     }
     //endregion
